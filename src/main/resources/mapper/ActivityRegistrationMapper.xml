@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.elderly_Platform.core.mapper.ActivityRegistrationMapper">
+
+    <select id="selectById" resultType="com.example.elderly_Platform.core.entity.ActivityRegistration">
+        SELECT * FROM activity_registration WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="selectByCondition" resultType="com.example.elderly_Platform.core.entity.ActivityRegistration">
+        SELECT * FROM activity_registration
+        <where>
+            deleted = 0
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="activityId != null">
+                AND activity_id = #{activityId}
+            </if>
+            <if test="checkInStatus != null and checkInStatus != ''">
+                AND check_in_status = #{checkInStatus}
+            </if>
+        </where>
+        ORDER BY create_time DESC, id DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO activity_registration (user_id, activity_id, check_in_status, check_in_time, deleted)
+        VALUES (#{userId}, #{activityId}, #{checkInStatus}, #{checkInTime}, 0)
+    </insert>
+
+    <update id="updateById" parameterType="com.example.elderly_Platform.core.entity.ActivityRegistration">
+        UPDATE activity_registration
+        <set>
+            <if test="checkInStatus != null and checkInStatus != ''">
+                check_in_status = #{checkInStatus},
+            </if>
+            <if test="checkInTime != null">
+                check_in_time = #{checkInTime},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+    <!-- 统计今日活动报名数 -->
+    <select id="countToday" resultType="int">
+        SELECT COUNT(*) FROM activity_registration WHERE deleted = 0 AND DATE(create_time) = CURDATE()
+    </select>
+
+    <!-- 逻辑删除 -->
+    <update id="deleteById">
+        UPDATE activity_registration SET deleted = 1 WHERE id = #{id}
+    </update>
+
+    <update id="updateCheckIn">
+        UPDATE activity_registration
+        SET check_in_status = '已签到', check_in_time = #{checkInTime}
+        WHERE user_id = #{userId} AND activity_id = #{activityId}
+    </update>
+
+    <select id="selectByUserAndActivity" resultType="com.example.elderly_Platform.core.entity.ActivityRegistration">
+        SELECT * FROM activity_registration
+        WHERE user_id = #{userId} AND activity_id = #{activityId} AND deleted = 0
+    </select>
+
+</mapper>

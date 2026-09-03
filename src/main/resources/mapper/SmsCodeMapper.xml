@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.elderly_Platform.core.mapper.SmsCodeMapper">
+
+    <select id="selectById" resultType="com.example.elderly_Platform.core.entity.SmsCode">
+        SELECT * FROM sms_code WHERE id = #{id}
+    </select>
+
+    <select id="selectValid" resultType="com.example.elderly_Platform.core.entity.SmsCode">
+        SELECT * FROM sms_code
+        WHERE phone = #{phone} AND code = #{code}
+          AND used = 0
+          AND expire_time &gt; NOW()
+        ORDER BY create_time DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectLatestByPhone" resultType="com.example.elderly_Platform.core.entity.SmsCode">
+        SELECT * FROM sms_code
+        WHERE phone = #{phone}
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sms_code (phone, code, expire_time, used, create_time)
+        VALUES (#{phone}, #{code}, #{expireTime}, 0, #{createTime})
+    </insert>
+
+    <update id="markUsed">
+        UPDATE sms_code SET used = 1 WHERE id = #{id} AND used = 0
+    </update>
+
+    <!-- 该表无 deleted 字段，无法逻辑删除，清理过期数据用物理删除 -->
+    <delete id="deleteExpired">
+        DELETE FROM sms_code WHERE expire_time &lt; NOW()
+    </delete>
+
+</mapper>

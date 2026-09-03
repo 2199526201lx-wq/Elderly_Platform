@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Elderly_Platform
+  datasource:
+    url: jdbc:mysql://localhost:3306/eldercare?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
+    hikari:
+      maximum-pool-size: 16
+      minimum-idle: 4
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0
+
+  ai:
+    openai:
+      api-key: sk-c69afa7bc8524cef9419b9011963aab4
+      base-url: https://api.deepseek.com
+      chat:
+        model: deepseek-v4-flash
+      audio:
+        speech:
+          enabled: false
+        transcription:
+          enabled: false
+
+
+# MyBatis 配置（用 XML 方式写 SQL，必须加这一段）
+mybatis:
+  mapper-locations: classpath:mapper/*.xml        # 告诉 MyBatis 去 resources/mapper 下找 XML
+  type-aliases-package: com.example.elderly_Platform.core.entity # 实体类包（与实际包名一致，注意大小写）
+  configuration:
+    map-underscore-to-camel-case: true            # 自动把 real_name 转成 realName
+
+
+
+
+jwt:
+  secret: elderly-platform-secret-key-2024-very-long-string
+  access-token-expire: 7200  			# 2 小时，单位秒
+  refresh-token-expire: 604800  		# 7 天，单位秒
+
+
+

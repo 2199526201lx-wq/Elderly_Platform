@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.elderly_Platform.core.mapper.AiConversationSessionMapper">
+
+    <select id="selectById" resultType="com.example.elderly_Platform.core.entity.AiConversationSession">
+        SELECT * FROM ai_conversation_session WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="selectByCondition" resultType="com.example.elderly_Platform.core.entity.AiConversationSession">
+        SELECT * FROM ai_conversation_session
+        <where>
+            deleted = 0
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="sessionName != null and sessionName != ''">
+                AND session_name LIKE CONCAT('%', #{sessionName}, '%')
+            </if>
+        </where>
+        ORDER BY update_time DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_conversation_session (user_id, session_name, create_time, update_time, deleted)
+        VALUES (#{userId}, #{sessionName}, #{createTime}, #{updateTime}, 0)
+    </insert>
+
+    <update id="updateById" parameterType="com.example.elderly_Platform.core.entity.AiConversationSession">
+        UPDATE ai_conversation_session
+        <set>
+            <if test="sessionName != null and sessionName != ''">
+                session_name = #{sessionName},
+            </if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+    <!-- 逻辑删除 -->
+    <update id="deleteById">
+        UPDATE ai_conversation_session SET deleted = 1 WHERE id = #{id}
+    </update>
+
+    <!-- 物理删除已逻辑删除超过 6 个月的会话（定时任务使用） -->
+    <delete id="deleteExpiredSessions">
+        DELETE FROM ai_conversation_session
+        WHERE deleted = 1
+          AND update_time &lt; DATE_SUB(NOW(), INTERVAL 6 MONTH)
+    </delete>
+
+</mapper>

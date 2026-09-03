@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.elderly_Platform.core.mapper.AppointmentSlotMapper">
+
+    <select id="selectById" resultType="com.example.elderly_Platform.core.entity.AppointmentSlot">
+        SELECT * FROM appointment_slot WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="selectByCondition" resultType="com.example.elderly_Platform.core.entity.AppointmentSlot">
+        SELECT * FROM appointment_slot
+        <where>
+            deleted = 0
+            <if test="packageId != null">
+                AND package_id = #{packageId}
+            </if>
+            <if test="appointDate != null">
+                AND appoint_date = #{appointDate}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY appoint_date ASC, time_range ASC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO appointment_slot (package_id, appoint_date, time_range, max_count, current_count, status, deleted)
+        VALUES (#{packageId}, #{appointDate}, #{timeRange}, #{maxCount}, #{currentCount}, #{status}, 0)
+    </insert>
+
+    <update id="updateById" parameterType="com.example.elderly_Platform.core.entity.AppointmentSlot">
+        UPDATE appointment_slot
+        <set>
+            <if test="packageId != null">
+                package_id = #{packageId},
+            </if>
+            <if test="appointDate != null">
+                appoint_date = #{appointDate},
+            </if>
+            <if test="timeRange != null and timeRange != ''">
+                time_range = #{timeRange},
+            </if>
+            <if test="maxCount != null">
+                max_count = #{maxCount},
+            </if>
+            <if test="currentCount != null">
+                current_count = #{currentCount},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+    <!-- 逻辑删除 -->
+    <update id="deleteById">
+        UPDATE appointment_slot SET deleted = 1 WHERE id = #{id}
+    </update>
+
+    <!-- 行锁：锁定这一行，防止两个请求同时预约最后一个名额 -->
+    <select id="selectForUpdate" resultType="com.example.elderly_Platform.core.entity.AppointmentSlot">
+        SELECT * FROM appointment_slot WHERE id = #{id} AND deleted = 0 FOR UPDATE
+    </select>
+
+    <!-- 原子增加人数：current_count = current_count + 1 -->
+    <update id="incrementCount">
+        UPDATE appointment_slot
+        SET current_count = current_count + 1
+        WHERE id = #{id} AND current_count &lt; max_count
+    </update>
+
+    <!-- 原子减少人数：current_count = current_count - 1 -->
+    <update id="decrementCount">
+        UPDATE appointment_slot
+        SET current_count = current_count - 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 查套餐价格 -->
+    <select id="selectPackagePrice" resultType="int">
+        SELECT price FROM appointment_package p
+        JOIN appointment_slot s ON p.id = s.package_id
+        WHERE s.id = #{slotId}
+    </select>
+
+</mapper>

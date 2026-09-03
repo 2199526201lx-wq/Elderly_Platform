@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.elderly_Platform.core.mapper.PointTransactionMapper">
+
+    <select id="selectById" resultType="com.example.elderly_Platform.core.entity.PointTransaction">
+        SELECT * FROM point_transaction WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="selectByCondition" resultType="com.example.elderly_Platform.core.entity.PointTransaction">
+        SELECT * FROM point_transaction
+        <where>
+            deleted = 0
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="type != null and type != ''">
+                AND type = #{type}
+            </if>
+            <if test="batchTxId != null">
+                AND batch_tx_id = #{batchTxId}
+            </if>
+            <if test="refId != null">
+                AND ref_id = #{refId}
+            </if>
+            <if test="expireTime != null">
+                AND expire_time &lt;= #{expireTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO point_transaction (
+            user_id, type, change_amount, balance_after, remain_amount,
+            expire_time, batch_tx_id, description, ref_id, create_time, update_time, deleted
+        ) VALUES (
+            #{userId}, #{type}, #{changeAmount}, #{balanceAfter}, #{remainAmount},
+            #{expireTime}, #{batchTxId}, #{description}, #{refId}, #{createTime}, #{updateTime}, 0
+        )
+    </insert>
+
+    <update id="updateById" parameterType="com.example.elderly_Platform.core.entity.PointTransaction">
+        UPDATE point_transaction
+        <set>
+            <if test="remainAmount != null">
+                remain_amount = #{remainAmount},
+            </if>
+            <if test="expireTime != null">
+                expire_time = #{expireTime},
+            </if>
+            <if test="batchTxId != null">
+                batch_tx_id = #{batchTxId},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+    <!-- 逻辑删除 -->
+    <update id="deleteById">
+        UPDATE point_transaction SET deleted = 1 WHERE id = #{id}
+    </update>
+
+    <!-- 查询用户可用的积分批次（FIFO：按获得时间升序，只查有余量且未过期的） -->
+    <select id="selectAvailableBatches" resultType="com.example.elderly_Platform.core.entity.PointTransaction">
+        SELECT *
+        FROM point_transaction
+        WHERE user_id = #{userId}
+          AND deleted = 0
+          AND remain_amount > 0
+          AND (expire_time IS NULL OR expire_time > NOW())
+        ORDER BY create_time
+    </select>
+
+    <!-- 查询已过期的积分批次（用于定时任务清理） -->
+    <select id="selectExpiredBatches" resultType="com.example.elderly_Platform.core.entity.PointTransaction">
+        SELECT * FROM point_transaction
+        WHERE deleted = 0
+          AND remain_amount > 0
+          AND expire_time IS NOT NULL
+          AND expire_time &lt; NOW()
+    </select>
+
+</mapper>

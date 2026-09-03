@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.elderly_Platform.core.mapper.AiConversationMessageMapper">
+
+    <select id="selectById" resultType="com.example.elderly_Platform.core.entity.AiConversationMessage">
+        SELECT * FROM ai_conversation_message WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="selectByCondition" resultType="com.example.elderly_Platform.core.entity.AiConversationMessage">
+        SELECT * FROM ai_conversation_message
+        <where>
+            deleted = 0
+            <if test="sessionId != null">
+                AND session_id = #{sessionId}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+            <if test="message != null and message != ''">
+                ANDmessage LIKE CONCAT('%', #{message}, '%')
+            </if>
+        </where>
+        ORDER BY update_time ASC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ai_conversation_message (session_id, user_id, role, message, create_time, update_time, deleted)
+        VALUES (#{sessionId}, #{userId}, #{role}, #{message}, #{createTime}, #{updateTime}, 0)
+    </insert>
+
+    <update id="updateById" parameterType="com.example.elderly_Platform.core.entity.AiConversationMessage">
+        UPDATE ai_conversation_message
+        <set>
+            <if test="role != null and role != ''">
+                role = #{role},
+            </if>
+            <if test="message != null and message != ''">
+                content = #{message},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+    <!-- 逻辑删除 -->
+    <update id="deleteById">
+        UPDATE ai_conversation_message SET deleted = 1 WHERE id = #{id}
+    </update>
+
+    <!-- 物理删除超过 6 个月的对话消息（定时任务使用） -->
+    <delete id="deleteExpiredMessages">
+        DELETE FROM ai_conversation_message
+        WHERE create_time &lt; DATE_SUB(NOW(), INTERVAL 6 MONTH)
+    </delete>
+
+</mapper>

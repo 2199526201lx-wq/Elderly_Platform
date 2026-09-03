@@ -1,0 +1,192 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ========== 老年人绿色主题全局样式 ========== */
+:root {
+  /* Vant 主题色覆盖：主色改为温和的翠绿色 */
+  --van-primary-color: #3b9e5a;
+  --van-primary-color-light: #e8f5e9;
+  --van-primary-color-lighter: #f0faf0;
+  --van-success-color: #3b9e5a;
+  --van-warning-color: #e6a23c;
+  --van-danger-color: #e6603c;
+  --van-text-color: #2f3e33;
+  --van-text-color-2: #4f6b55;
+  --van-text-color-3: #86a08e;
+  --van-background: #eef5ee;
+  --van-background-2: #e4efe4;
+  --van-background-3: #dcebdc;
+  --van-border-color: #cfe3cf;
+  --van-radius-md: 12px;
+  --van-radius-lg: 16px;
+
+  /* 页面配色 */
+  --el-green-dark: #2e7d32;
+  --el-green-main: #3b9e5a;
+  --el-green-soft: #a5cf92;
+  --el-green-bg: #eef5ee;
+  --el-green-card: #ffffff;
+  --el-green-text: #2f3e33;
+  --el-green-text-sub: #59705f;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* 老年人友好：更大字号、偏大行高、柔和绿色背景 */
+  font-size: 16px;
+  line-height: 1.7;
+  background-color: #eef5ee;
+  color: #2f3e33;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 100%;
+  min-height: 100vh;
+}
+
+.page {
+  min-height: 100vh;
+  background-color: #eef5ee;
+}
+
+/* 通用卡片：加大内边距与圆角，柔和白色 */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 12px 16px;
+  box-shadow: 0 2px 8px rgba(59, 158, 90, 0.06);
+}
+
+/* 页面标题：字体更大、颜色深沉 */
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  padding: 16px 20px;
+  background: #ffffff;
+  color: #2e7d32;
+  border-bottom: 2px solid #dcebdc;
+}
+
+/* 所有文本默认放大，利于老年用户阅读 */
+button,
+input,
+textarea,
+select,
+.van-cell__title,
+.van-field__label {
+  font-size: 16px !important;
+}
+
+/* Vant 按钮圆角与字号 */
+.van-button {
+  border-radius: 12px !important;
+  font-size: 16px !important;
+  min-height: 44px;
+}
+
+/* Van 导航栏加大 */
+.van-nav-bar {
+  background: #ffffff !important;
+}
+.van-nav-bar__title {
+  font-size: 18px !important;
+  color: #2e7d32 !important;
+  font-weight: 700;
+}
+
+/* 标签栏：绿色高亮 */
+.van-tabbar {
+  background: #ffffff;
+  border-top: 1px solid #e0eee0;
+}
+.van-tabbar-item--active {
+  color: #3b9e5a !important;
+}
+.van-tabbar-item__icon--active {
+  color: #3b9e5a !important;
+}
+.van-tabbar-item__text--active {
+  color: #3b9e5a !important;
+}
+
+/* 标签页下划线绿色 */
+.van-tabs__line {
+  background-color: #3b9e5a !important;
+}
+.van-tab--active {
+  color: #3b9e5a !important;
+}
+
+/* 单元格 hover/箭头绿色 */
+.van-cell.is-link::after {
+  border-color: #a5cf92;
+}
+.van-cell--clickable:active {
+  background-color: #f0faf0;
+}
+
+/* 提示toast */
+:root {
+  --van-toast-text-style: {
+    font-size: 16px;
+  }
+}
+
+/* 弹窗圆角、日期选择器选中色 */
+.van-popup {
+  border-radius: 16px 16px 0 0;
+}
+.van-picker__confirm,
+.van-picker__cancel {
+  color: #3b9e5a !important;
+}
+.van-date-picker .van-picker-column__item--active {
+  color: #3b9e5a !important;
+}
+.van-radio__icon--checked .van-icon,
+.van-checkbox__icon--checked .van-icon {
+  border-color: #3b9e5a !important;
+  background-color: #3b9e5a !important;
+}
+.van-tag--primary {
+  background-color: #3b9e5a !important;
+}
+
+/* 滚动条美化（桌面预览时） */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #bcd9bc;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #eef5ee;
+}
+
+/* 页面内标题统一绿色 */
+h1, h2, h3, h4 {
+  color: #2e7d32;
+}
+
+/* 表单内分组圆角 */
+.van-cell-group {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.van-empty__description {
+  font-size: 16px;
+  color: #59705f;
+}

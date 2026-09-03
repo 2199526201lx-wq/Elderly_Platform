@@ -1,0 +1,116 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ========== 老年人绿色主题全局样式（管理端） ========== */
+:root {
+  /* Element Plus 主题色覆盖：主色改为温和翠绿 */
+  --el-color-primary: #3b9e5a;
+  --el-color-primary-light-3: #4fae6d;
+  --el-color-primary-light-5: #7cc48f;
+  --el-color-primary-light-7: #a9d8b1;
+  --el-color-primary-light-8: #c2e4c6;
+  --el-color-primary-light-9: #e8f5e9;
+  --el-color-primary-dark-2: #2e7d32;
+
+  --el-color-success: #3b9e5a;
+  --el-color-warning: #e6a23c;
+  --el-color-danger: #e6603c;
+  --el-color-error: #e6603c;
+  --el-text-color-primary: #2f3e33;
+  --el-text-color-regular: #3d5342;
+  --el-text-color-secondary: #59705f;
+  --el-border-color: #cfe3cf;
+  --el-border-color-light: #dcebdc;
+  --el-border-color-lighter: #e4efe4;
+  --el-fill-color-blank: #ffffff;
+  --el-bg-color-page: #eef5ee;
+  --el-bg-color: #ffffff;
+
+  /* 自定义绿色变量 */
+  --el-green-dark: #2e7d32;
+  --el-green-main: #3b9e5a;
+  --el-green-soft: #a5cf92;
+  --el-green-bg: #eef5ee;
+  --el-sidebar-bg: #2c4431;   /* 侧边栏深绿色 */
+  --el-sidebar-text: #bfd8c2;
+  --el-sidebar-active: #8fd49c;
+}
+
+html, body, #app {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  background-color: #eef5ee;
+}
+
+/* 老年人友好：控件字号加大、行高放宽 */
+button, input, textarea, select {
+  font-size: 15px !important;
+}
+.el-button {
+  font-size: 15px !important;
+}
+
+.page-container {
+  padding: 20px;
+}
+
+.search-bar {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 管理端页面标题颜色统一 */
+h1, h2, h3, h4 {
+  color: #2e7d32;
+}
+
+/* Element 卡片圆角加大 */
+.el-card {
+  border-radius: 14px !important;
+  border-color: #dcebdc !important;
+}
+
+/* Element 表格表头绿色调 */
+.el-table th.el-table__cell {
+  background-color: #e8f5e9 !important;
+  color: #2e7d32 !important;
+}
+
+/* 弹窗圆角 */
+.el-dialog {
+  border-radius: 14px;
+}
+
+/* 标签页下划线绿色 */
+.el-tabs__active-bar {
+  background-color: #3b9e5a !important;
+}
+.el-tabs__item.is-active {
+  color: #3b9e5a !important;
+}
+
+/* 分页高亮绿色 */
+.el-pagination.is-background .el-pager li.is-active {
+  background-color: #3b9e5a !important;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #bcd9bc;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #eef5ee;
+}

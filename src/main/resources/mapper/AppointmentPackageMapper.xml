@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.elderly_Platform.core.mapper.AppointmentPackageMapper">
+
+    <select id="selectById" resultType="com.example.elderly_Platform.core.entity.AppointmentPackage">
+        SELECT * FROM appointment_package WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="selectByCondition" resultType="com.example.elderly_Platform.core.entity.AppointmentPackage">
+        SELECT * FROM appointment_package
+        <where>
+            deleted = 0
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO appointment_package (name, cover_url, description, price, suitable_people, items, status, deleted)
+        VALUES (#{name}, #{coverUrl}, #{description}, #{price}, #{suitablePeople}, #{items}, #{status}, 0)
+    </insert>
+
+    <update id="updateById" parameterType="com.example.elderly_Platform.core.entity.AppointmentPackage">
+        UPDATE appointment_package
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="coverUrl != null">
+                cover_url = #{coverUrl},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="suitablePeople != null">
+                suitable_people = #{suitablePeople},
+            </if>
+            <if test="items != null">
+                items = #{items},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+    <!-- 逻辑删除 -->
+    <update id="deleteById">
+        UPDATE appointment_package SET deleted = 1 WHERE id = #{id}
+    </update>
+
+</mapper>
