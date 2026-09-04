@@ -6,7 +6,7 @@
 ## 🛠技术栈
 ### 后端
 - SpringBoot2
-- MyBatis‑Plus
+- MyBatis
 - MySQL
 
 ### 前端
