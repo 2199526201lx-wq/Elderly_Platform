@@ -5,12 +5,12 @@
 
 ## 🛠技术栈
 ### 后端
-- SpringBoot2
+- SpringBoot
 - MyBatis
 - MySQL
 
 ### 前端
-- Vue2
+- Vue3
 - Element‑UI
 
 ## 🚀部署运行
